@@ -1,11 +1,12 @@
-name: Docker Client Build and Push
+name: Docker Build and Push
 
 on:
   push:
-    branches: ["main", "master"]
+    branches: [ "main", "master" ]
   workflow_dispatch:
 
 env:
+  # Alibaba Cloud ACR details
   REGISTRY: registry.cn-shanghai.aliyuncs.com
   NAMESPACE: linran-pub
   IMAGE_NAME: trojan-client
@@ -25,13 +26,12 @@ jobs:
           username: ${{ secrets.ACR_USERNAME }}
           password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build and push Docker image (linux/amd64)
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: Dockerfile.client
           push: true
-          platforms: linux/amd64
           tags: |
             ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:latest
             ${{ env.REGISTRY }}/${{ env.NAMESPACE }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
